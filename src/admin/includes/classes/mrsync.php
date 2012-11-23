@@ -67,7 +67,7 @@ class MRSync
 	 */
 	public function login($url, $username, $password)
 	{
-		$current_version = PROJECT_VERSION_NAME . ' ' . PROJECT_VERSION_MAJOR . '.' . PROJECT_VERSION_MINOR
+		$current_version = PROJECT_VERSION_NAME . ' ' . PROJECT_VERSION_MAJOR . '.' . PROJECT_VERSION_MINOR;
 		$headers = array('X-Request-Origin: Zencart|0.1b|'.$current_version);
 		$context = stream_context_create(array('http'=>array('header'=>$headers)));
 
