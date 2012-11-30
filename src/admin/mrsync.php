@@ -1,7 +1,5 @@
 <?php
-
 require ('includes/application_top.php');
-
 $action = (isset($_GET['action']) ? $_GET['action'] : '');
 $db_installed = (isset($_GET['db_installed']) ? $_GET['db_installed'] : '');
 
@@ -80,7 +78,7 @@ else
 	{
 		$data = $_POST['mrsync'];
 		
-		$data['MRSYNC_URL'] = 'http://'. $data['MRSYNC_URL']  .'.ip-zone.com/ccm/admin/api/version/2/wsdl';
+		$data['MRSYNC_URL'] = 'http://'. $data['MRSYNC_URL']  .'.ip-zone.com';
 		
 		// Try to login with provided data
 		$login = $mr_sync->login( $data['MRSYNC_URL'] , $data['MRSYNC_USERNAME'] , $data['MRSYNC_PASSWORD'] );
@@ -274,6 +272,7 @@ require (DIR_WS_INCLUDES . 'header.php');
 												<td class="infoBoxContent">
 													<?php echo TEXT_GROUP ?>:
 													<br />
+
 													<?php echo zen_draw_pull_down_menu( 'mrsync[MRSYNC_GROUP]' , $groups , $data['MRSYNC_GROUP'] ) ?>
 												</td>
 											</tr>
