@@ -28,7 +28,7 @@ class MRSync
         curl_setopt($curl, CURLOPT_POST, 1);
 
         $current_version = PROJECT_VERSION_NAME . ' ' . PROJECT_VERSION_MAJOR . '.' . PROJECT_VERSION_MINOR;
-        $headers = array('X-Request-Origin: Zencart|0.1b|'.$current_version);
+        $headers = array('X-Request-Origin: Zencart|1.0|'.$current_version);
 
                 curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
         $this->_curl = $curl;
@@ -68,7 +68,7 @@ class MRSync
             curl_setopt( $this->_curl, CURLOPT_POSTFIELDS, $params );
 
             $current_version = PROJECT_VERSION_NAME . ' ' . PROJECT_VERSION_MAJOR . '.' . PROJECT_VERSION_MINOR;
-            $headers = array('X-Request-Origin: Zencart|0.1b|'.$current_version);
+            $headers = array('X-Request-Origin: Zencart|1.0|'.$current_version);
 
             curl_setopt($this->_curl, CURLOPT_HTTPHEADER, $headers);
             $result = curl_exec( $this->_curl );
@@ -123,7 +123,7 @@ class MRSync
             curl_setopt($this->_curl, CURLOPT_POSTFIELDS, $post);
 
             $current_version = PROJECT_VERSION_NAME . ' ' . PROJECT_VERSION_MAJOR . '.' . PROJECT_VERSION_MINOR;
-            $headers = array('X-Request-Origin: Zencart|0.1b|'.$current_version);
+            $headers = array('X-Request-Origin: Zencart|1.0|'.$current_version);
 
             $result = curl_exec($this->_curl);
             $jsonResult = json_decode($result);
@@ -161,7 +161,7 @@ class MRSync
             curl_setopt($this->_curl, CURLOPT_POSTFIELDS, $post);
 
             $current_version = PROJECT_VERSION_NAME . ' ' . PROJECT_VERSION_MAJOR . '.' . PROJECT_VERSION_MINOR;
-            $headers = array('X-Request-Origin: Zencart|0.1b|'.$current_version);
+            $headers = array('X-Request-Origin: Zencart|1.0|'.$current_version);
 
             curl_setopt($this->_curl, CURLOPT_HTTPHEADER, $headers);
 
@@ -247,7 +247,7 @@ class MRSync
             curl_setopt($this->_curl, CURLOPT_POSTFIELDS, $post);
 
             $current_version = PROJECT_VERSION_NAME . ' ' . PROJECT_VERSION_MAJOR . '.' . PROJECT_VERSION_MINOR;
-            $headers = array('X-Request-Origin: Zencart|0.1b|'.$current_version);
+            $headers = array('X-Request-Origin: Zencart|1.0|'.$current_version);
 
             curl_setopt($this->_curl, CURLOPT_HTTPHEADER, $headers);
 
