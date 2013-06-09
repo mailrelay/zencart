@@ -1,6 +1,6 @@
 == MailRelay Sync Plugin for Zen Cart ==
 
-Version: 0.1b
+Version: 1.0
 Author: MailRelay.es
 
 Download latest version at: http://mailrelay.es/plugins/
@@ -9,7 +9,7 @@ Download latest version at: http://mailrelay.es/plugins/
 
 This plugin allows you to sync your store's customers with your Mail Relay account subscribers into an specified group.
 
-It was tested on version 1.3.9d and requires PHP compiled with SOAP module.
+It was tested on version 1.5.1 and requires PHP compiled with CURL module.
 
 == Installation ==
 
@@ -24,7 +24,7 @@ It was tested on version 1.3.9d and requires PHP compiled with SOAP module.
 		$phpBB->phpbb_create_account($nick, $password, $email_address);
 	}
 	// End phppBB create account
-    
+
 Add after:
 
 	// MailRelay Sync module
@@ -33,8 +33,8 @@ Add after:
 		// Instance MRSync class
 		require( 'admin/'. DIR_WS_CLASSES .'mrsync.php' );
 		$mr_sync = new MRSync();
-	
-		$mr_sync->login( MRSYNC_URL , MRSYNC_USERNAME , MRSYNC_PASSWORD );
+
+		$mr_sync->initCurl(MRSYNC_URL, MRSYNC_KEY);
 		$mr_sync->syncSubscriber( $email_address , $firstname .' '. $lastname , MRSYNC_GROUP );
 	}
 
@@ -54,8 +54,8 @@ Add after:
 		// Instance MRSync class
 		require( 'admin/'. DIR_WS_CLASSES .'mrsync.php' );
 		$mr_sync = new MRSync();
-	
-		$mr_sync->login( MRSYNC_URL , MRSYNC_USERNAME , MRSYNC_PASSWORD );
+
+		$mr_sync->initCurl(MRSYNC_URL, MRSYNC_KEY);
 		$mr_sync->syncSubscriber( $email_address , $firstname .' '. $lastname , MRSYNC_GROUP , $old_addr_check->fields['customers_email_address'] );
 	}
 
@@ -80,7 +80,7 @@ Add after:
                 {
                         require(DIR_WS_CLASSES.'mrsync.php');
                         $mr_sync = new MRSync();
-                        $mr_sync->login(MRSYNC_URL, MRSYNC_USERNAME, MRSYNC_PASSWORD);
+                        $mr_sync->initCurl(MRSYNC_URL, MRSYNC_KEY);
                         $result = $mr_sync->deleteSubscriber($email);
                 }
         }
@@ -90,21 +90,21 @@ Where admin is the path where your control panel is set.
 6. Open file includes/filenames.php and search for:
 
 	define('FILENAME_SQLPATCH','sqlpatch');
-	
+
 Add after:
 
 	define('FILENAME_MRSYNC','mrsync');
-	
+
 7. Open file admin/includes/boxes/tools_dhtml.php and search for (*):
 
 	$za_contents[] = array('text' => BOX_TOOLS_SQLPATCH, 'link' => zen_href_link(FILENAME_SQLPATCH, '', 'NONSSL'));
-	
+
 Add after:
 
 	$za_contents[] = array('text' => BOX_TOOLS_MRSYNC, 'link' => zen_href_link(FILENAME_MRSYNC, '', 'NONSSL'));
 
 Where admin is the path where your control panel is set.
-	
+
 8. (*) For ZenCart 1.5.0 and up it's not possible to do the previous step. Instead you need to update your database with the following query:
 
 	INSERT INTO `zencart`.`admin_pages` (
@@ -118,18 +118,18 @@ Where admin is the path where your control panel is set.
 	)
 	VALUES (
 	'mailrelaySelect', 'BOX_TOOLS_MRSYNC', 'FILENAME_MRSYNC', '', 'tools', 'Y', '20'
-	); 	
-	
+	);
+
 9. Open file admin/includes/languages/en.php ( or es.php, depends of your language ) and search for:
 
 	define('BOX_TOOLS_EZPAGES','EZ-Pages');
-	
+
 Add after:
 
 	define('BOX_TOOLS_MRSYNC','MailRelay Sync');
 
 Where admin is the path where your control panel is set.
-	
+
 10. You have finished module installation. Check configuring section to understand how to configure and use this plugin.
 
 
@@ -142,8 +142,7 @@ Where admin is the path where your control panel is set.
 3. After installation, you will have to inform the following fields:
 
 - Account URL
-- Username
-- Password
+- API Key
 
 You must make sure that the username have API permissions, otherwise you will get a permission error.
 
@@ -165,4 +164,3 @@ Follow these steps to uninstall this plugin:
 2. Remove code changes done during installation process
 
 3. Remove configuration group on database for MRSync.
-

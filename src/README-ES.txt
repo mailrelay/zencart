@@ -1,6 +1,6 @@
 == MailRelay Sync Plugin para Zen Cart ==
 
-Versión: 0.1b
+Versión: 1.0
 Autor: MailRelay.es
 
 Descarge versión más reciente en: http://mailrelay.es/plugins/
@@ -9,7 +9,7 @@ Descarge versión más reciente en: http://mailrelay.es/plugins/
 
 Este plugin te permite sincronizar los clientes de su tienda con su cuenta Mail Relay en un grupo determinado.
 
-Fue probado en la versión 1.3.9d y requiere PHP compilado con el módulo SOAP.
+Fue probado en la versión 1.5.1 y requiere PHP compilado con el módulo CURL.
 
 == Instalación ==
 
@@ -24,7 +24,7 @@ Fue probado en la versión 1.3.9d y requiere PHP compilado con el módulo SOAP.
 		$phpBB->phpbb_create_account($nick, $password, $email_address);
 	}
 	// End phppBB create account
-    
+
 Después de eso, inserte:
 
 	// MailRelay Sync module
@@ -33,10 +33,11 @@ Después de eso, inserte:
 		// Instance MRSync class
 		require( 'admin/'. DIR_WS_CLASSES .'mrsync.php' );
 		$mr_sync = new MRSync();
-	
-		$mr_sync->login( MRSYNC_URL , MRSYNC_USERNAME , MRSYNC_PASSWORD );
+
+		$mr_sync->initCurl(MRSYNC_URL, MRSYNC_KEY);
 		$mr_sync->syncSubscriber( $email_address , $firstname .' '. $lastname , MRSYNC_GROUP );
 	}
+
 Recuerde que ha de sustituir 'admin' por el directorio donde usted tenga ubicado su panel de control.
 
 4. Abrir el archivo includes/modules/pages/account_edit/header_php.php y buscar por:
@@ -53,10 +54,11 @@ Después de eso, inserte:
 		// Instance MRSync class
 		require( 'admin/'. DIR_WS_CLASSES .'mrsync.php' );
 		$mr_sync = new MRSync();
-	
-		$mr_sync->login( MRSYNC_URL , MRSYNC_USERNAME , MRSYNC_PASSWORD );
+
+		$mr_sync->initCurl(MRSYNC_URL, MRSYNC_KEY);
 		$mr_sync->syncSubscriber( $email_address , $firstname .' '. $lastname , MRSYNC_GROUP , $old_addr_check->fields['customers_email_address'] );
 	}
+
 Recuerde que ha de sustituir 'admin' por el directorio donde usted tenga ubicado su panel de control.
 
 5. Abrir el archivo admin/customers.php y buscar por:
@@ -78,29 +80,31 @@ Después de eso, inserte:
                 {
                         require(DIR_WS_CLASSES.'mrsync.php');
                         $mr_sync = new MRSync();
-                        $mr_sync->login(MRSYNC_URL, MRSYNC_USERNAME, MRSYNC_PASSWORD);
+                        $mr_sync->initCurl(MRSYNC_URL, MRSYNC_KEY);
                         $result = $mr_sync->deleteSubscriber($email);
                 }
         }
+
 Donde admin será el directorio donde usted tenga ubicado su panel de control.
- 
+
 6. Abrir el archivo includes/filenames.php y buscar por:
 
 	define('FILENAME_SQLPATCH','sqlpatch');
-	
+
 Después de eso, inserte:
 
 	define('FILENAME_MRSYNC','mrsync');
-	
+
 7. Abrir el archivo admin/includes/boxes/tools_dhtml.php y buscar por (*):
 
 	$za_contents[] = array('text' => BOX_TOOLS_SQLPATCH, 'link' => zen_href_link(FILENAME_SQLPATCH, '', 'NONSSL'));
-	
+
 Después de eso, inserte:
 
 	$za_contents[] = array('text' => BOX_TOOLS_MRSYNC, 'link' => zen_href_link(FILENAME_MRSYNC, '', 'NONSSL'));
+
 Donde admin será el directorio donde usted tenga ubicado su panel de control.
-	
+
 8.(*) A partir de la versión 1.5.0 y superiores de ZenCart no es posible realizar el paso anterior. En su lugar es necesario actualizar la base de datos con la siguiente consulta:
 
 	INSERT INTO `zencart`.`admin_pages` (
@@ -114,19 +118,20 @@ Donde admin será el directorio donde usted tenga ubicado su panel de control.
 	)
 	VALUES (
 	'mailrelaySelect', 'BOX_TOOLS_MRSYNC', 'FILENAME_MRSYNC', '', 'tools', 'Y', '20'
-	); 
-	
+	);
+
 9. Abrir el archivo admin/includes/languages/en.php ( o es.php, depende de su lengua ) y buscar por:
 
 	define('BOX_TOOLS_EZPAGES','EZ-Pages');
-	
+
 Después de eso, inserte:
 
 	define('BOX_TOOLS_MRSYNC','MailRelay Sync');
 
 Donde admin será el directorio donde usted tenga ubicado su panel de control.
-	
+
 10. Ha finalizado la instalación del módulo. Compruebe la sección de configuración para saber cómo configurar y utilizar esta aplicación.
+
 
 == Configuración ==
 
@@ -137,8 +142,7 @@ Donde admin será el directorio donde usted tenga ubicado su panel de control.
 3. Después de la instalación, tendrá que informar a los siguientes campos:
 
 - URL de su cuenta
-- Username
-- Password
+- Clave API
 
 Debe asegurarse de que el usuario tiene permisos de API, de lo contrario obtendrá un error de permiso.
 
