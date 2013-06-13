@@ -72,9 +72,10 @@ else
     {
         $data = $_POST['mrsync'];
 
-        $data['MRSYNC_URL'] = $data['MRSYNC_URL'];
+        $data['MRSYNC_URL'] = trim($data['MRSYNC_URL']);
+        $data['MRSYNC_KEY'] = trim($data['MRSYNC_KEY']);
 
-        $mr_sync->initCurl(MRSYNC_URL, MRSYNC_KEY);
+        $mr_sync->initCurl(trim(MRSYNC_URL), trim(MRSYNC_KEY));
 
         // Check if we have to sync now
         if ( $data['MRSYNC_NOW'] == 'on' )
@@ -90,7 +91,7 @@ else
             // Save configuration paramaters
             foreach ( $data as $key => $value )
             {
-                $db->Execute( 'UPDATE '. TABLE_CONFIGURATION .' SET configuration_value = "'. zen_db_prepare_input( $value ) .'" WHERE configuration_key = "'. zen_db_prepare_input( $key ) .'"' );
+                $db->Execute( 'UPDATE '. TABLE_CONFIGURATION .' SET configuration_value = "'. zen_db_prepare_input( trim($value) ) .'" WHERE configuration_key = "'. zen_db_prepare_input( $key ) .'"' );
             }
         }
 

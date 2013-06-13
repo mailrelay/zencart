@@ -21,11 +21,13 @@ class MRSync
 
     public function initCurl($host, $apiKey)
     {
-        $url = 'http://'.$host."/ccm/admin/api/version/2/&type=json";
+        $url = 'https://'.$host."/ccm/admin/api/version/2/&type=json";
         $curl = curl_init($url);
 
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($curl, CURLOPT_POST, 1);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($curl, CURLOPT_SSLVERSION, 3);
 
         $current_version = PROJECT_VERSION_NAME . ' ' . PROJECT_VERSION_MAJOR . '.' . PROJECT_VERSION_MINOR;
         $headers = array('X-Request-Origin: Zencart|1.0|'.$current_version);
